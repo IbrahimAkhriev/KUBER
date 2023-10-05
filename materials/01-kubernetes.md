@@ -1,125 +1,125 @@
 # Kubernetes
 
-**Kubernetes** - это мощный фреймворк для оркестрации контейнеров приложений, разработанный компанией Google. Как и docker swarm, он выполняет основные функции любого инструмента оркестрации: высокую доступность, защиту внутреннего трафика, инкапсуляцию сложной микросервисной архитектуры приложения в единую сущность и так далее. Но в чем основное отличие **Kubernetes** от **Docker Swarm**? Помимо более высокой сложности и большего количества доступных инструментов контроля контейнеров, основной особенностью **Kubernetes** является тот факт, что он является более высокоуровневым решением, чем **Docker Swarm**, и не завязан непосредственно на технологии *Docker*. Да, на данный момент docker является абсолютным лидером в сфере контейнерищации приложений, но все же это не единственная технология, и **Kubernetes** предлагает единый подход вне зависимости от инструмента контейнеризации.
+**Kubernetes** is a powerful framework for orchestrating application containers developed by Google. Like docker swarm, it performs the basic functions of any orchestration tool: high availability, protection of internal traffic, encapsulation of a complex microservice application architecture into a single entity, and so on. But what is the main difference between **Kubernetes** and **Docker Swarm**? Besides higher complexity and more container control tools, the main feature of **Kubernetes** is the fact that it is a higher-level solution than **Docker Swarm** and is not tied directly to *Docker* technology. Yes, at the moment docker is the absolute leader in application containerization, but still it is not the only technology, and **Kubernetes** offers a unified approach regardless of the containerization tool.
 
-## Архитектура и принципы работы Kubernetes
+## The architecture and principles of Kubernetes
 
-Концептуально кластер Kubernetes представляет собой следующую структуру:
+Conceptually, a Kubernetes cluster is the following structure:
 
 <img src="misc/images/kubernetes.drawio.png"  width="600">
 
-Архитектура Kubernetes включает в себя следующие основные компоненты:
+The architecture of Kubernetes includes the following main components:
 
-*Master node* - это главный узел, который управляет всеми узлами в кластере Kubernetes. Он состоит из нескольких компонентов:
+*Master node* is the main node that manages all the nodes in a Kubernetes cluster. It consists of several components:
 
-1. kube-apiserver: это компонент, который предоставляет API для управления кластером Kubernetes.
-2. etcd: это хранилище ключ-значение, которое используется для хранения данных конфигурации кластера Kubernetes.
-3. kube-scheduler: это компонент, который отвечает за планирование работы на узлах в кластере Kubernetes.
-4. kube-controller-manager: это компонент, который управляет контроллерами, которые отвечают за выполнение операций, таких как масштабирование и восстановление после сбоев.
+1. kube-apiserver: a component that provides an API for managing a Kubernetes cluster.
+2. etcd: a key-value store used to store Kubernetes cluster configuration data.
+3. kube-scheduler: a component responsible for scheduling work on nodes in a Kubernetes cluster.
+4. kube-controller-manager: is a component that manages the controllers that are responsible for performing operations such as scaling and fault recovery.
 
-*Node* или *Worker node* - это узел, на котором работают контейнеры приложений. Он состоит из следующих компонентов:
+A *Node* or *Worker node* is the node on which application containers run. It consists of the following components:
 
-1. kubelet: это компонент, который управляет контейнерами на узле и взаимодействует с kube-apiserver на главном узле.
-2. kube-proxy: это компонент, который отвечает за маршрутизацию сетевых запросов к контейнерам на узле.
+1. kubelet: a component that manages containers on the node and communicates with the kube-apiserver on the master node.
+2. kube-proxy: a component that is responsible for routing network requests to containers on the node.
 
-*Pod* - это наименьшая единица в Kubernetes, которая содержит один или несколько контейнеров приложения. *Pod* является миниальной абстракцией Kubernetes в силу того, что Kubernetes как технология стремится отойти от привязки к конкретному инструменту контейнеризации, поэтому и возникла необходимость в создании нового типа абстракции, являющегося дополнительным "контейнером для контейнера". Каждый *Pod* имеет свой IP-адрес (определяеммый динамически в момент его запуска) и совместно использует ресурсы узла, на котором он работает. Важно понимать, что при перезапуске *Pod*, его IP-адрес изменяется, так как фактически поднимается новый *Pod*.
+A *Pod* is the smallest unit in Kubernetes that contains one or more application containers. *Pod* is a minimal Kubernetes abstraction due to the fact that Kubernetes as a technology seeks to move away from being bound to a specific containerization tool, hence the need to create a new type of abstraction, which is an additional "container for container". Each *Pod* has its own IP address (determined dynamically when it runs) and shares the resources of the host it is running on. It is important to understand that when a *Pod* is restarted, its IP address changes because a new *Pod* is actually being started.
 
-Но существует и множество других необходимых для понимания архитектуры Kubernetes объектов, большинство из которых представлены ниже:
+But there are many other objects necessary to understand the Kubernetes architecture, most of which are listed below:
 
-*Service* - это объект **Kubernetes**, который обеспечивает постоянный IP-адрес и DNS-имя для доступа к приложению внутри кластера. Он может маршрутизировать запросы к разным *Pod*'ам на основе селекторов. Более того, при реплицировании *Pod* объект *service* выступает и в роли балансировщика, распределяющего запросы между репликами. 
+The *Service* is a **Kubernetes** object that provides a persistent IP address and DNS name for accessing the application within the cluster. It can route requests to different *Pods* based on selectors. Moreover, when replicating *Pod*, the *service* object also acts as a balancer, distributing requests between replicas.
 
-*Volume* - это объект **Kubernetes**, который используется для хранения данных, которые нужны контейнерам в *Pod*. Volume может быть подключен к контейнеру приложения, чтобы обеспечить доступ к данным.
+The *Volume* is a **Kubernetes** object that is used to store data that containers in *Pod* need. Volume can be connected to an application container to provide access to data.
 
-*Namespace* - это объект **Kubernetes**, который используется для группировки ресурсов кластера и разделения доступа к этим ресурсам между пользователями и командами.
+The *Namespace* is a **Kubernetes** object used to group cluster resources and share access to those resources between users and teams.
 
-В **Kubernetes** реплицирование (replication) - это механизм, который позволяет создавать несколько копий одного и того же приложения и запускать их на нескольких узлах. Это обеспечивает высокую доступность приложения, а также позволяет обрабатывать большую нагрузку.
+In **Kubernetes**, replication is a mechanism that allows you to create multiple copies of the same application and run them on multiple nodes. This ensures high availability of the application and also allows you to handle large workloads.
 
-Реплика-контроллер (Replication Controller) управляет процессом создания и масштабирования реплицированных подов (replicated pods) в Kubernetes. Когда создается реплика-контроллер, он создает необходимое количество подов, указанное в спецификации контроллера. Если какой-либо под выходит из строя или удаляется, контроллер автоматически создает новый под, чтобы заменить потерянный.
+Replication Controller manages the process of creating and scaling replicated pods in Kubernetes. When a replication controller is created, it creates the required number of pods specified in the controller specification. If any pod fails or is deleted, the controller automatically creates a new pod to replace the lost one.
 
-Реплицированные поды имеют *метку* (label), которая помогает реплика-контроллеру управлять ими. Метки также используются для того, чтобы сервисы (services) могли определять, какие поды должны принимать трафик.
+Replicated pods have a *label* that helps the replica controller manage them. Labels are also used so that services can determine which pods should receive traffic.
 
-Реплика-контроллеры могут быть использованы для масштабирования приложений горизонтально, путем увеличения или уменьшения количества реплицированных подов. Это позволяет быстро реагировать на изменения в нагрузке на приложение.
+Replica controllers can be used to scale applications horizontally, by increasing or decreasing the number of replicated pods. This allows you to respond quickly to changes in application load.
 
-В **Kubernetes** *Deployment* и *StatefulSet* это объекты, которые управляют запуском и масштабированием приложений. Оба объекта представляют собой декларативный способ определения желаемого состояния приложения и автоматического управления его жизненным циклом.
+In **Kubernetes**, *Deployment* and *StatefulSet* are objects that control application runtime and scaling. Both objects are a declarative way of defining the desired state of an application and automatically managing its life cycle.
 
-*Deployment* обеспечивает управление развертыванием (установкой) приложения в **Kubernetes**. Он описывает, как и когда необходимо создавать экземпляры приложения, а также какие обновления необходимо производить при изменении конфигурации. *Deployment* автоматически создает и управляет несколькими репликами приложения, что обеспечивает отказоустойчивость и масштабируемость.
+*Deployment* provides management of application deployment (installation) in **Kubernetes**. It describes how and when to create instances of the application as well as what updates to make when the configuration changes. *Deployment* automatically creates and manages multiple replicas of the application for fault tolerance and scalability.
 
-*StatefulSet* обеспечивает управление установкой и масштабированием приложений, которые имеют состояние. Это может быть полезно, например, для баз данных, которые хранят данные на жестких дисках, и которые не могут быть просто скопированы и запущены на другом узле кластера. *StatefulSet* обеспечивает уникальные имена для каждого экземпляра приложения, сохраняет их состояние и предоставляет уникальные идентификаторы хостов для каждого экземпляра.
+*StatefulSet* provides control over the installation and scaling of applications that have state. This can be useful, for example, for databases that store data on hard disks and that cannot simply be copied and run on another cluster node. *StatefulSet* provides unique names for each application instance, stores their state, and provides unique host IDs for each instance.
 
-В обоих случаях **Kubernetes** автоматически управляет жизненным циклом приложения, масштабированием, обновлением и откатом изменений. Разработчики могут определить желаемое состояние приложения, а **Kubernetes** обеспечит, чтобы оно было достигнуто и поддерживалось в течение всего жизненного цикла приложения.
+In both cases, **Kubernetes** automatically manages the application life cycle, scaling, updating and rolling back changes. Developers can define the desired state of the application, and **Kubernetes** will ensure that it is achieved and maintained throughout the application life cycle.
 
-*Ingress* в **Kubernetes** — это объект, который позволяет управлять входящим трафиком в кластер. *Ingress* служит как контроллер, который определяет правила маршрутизации трафика между службами в кластере и внешним миром. Это позволяет разработчикам и администраторам управлять входящим трафиком, настраивать маршрутизацию и безопасность, а также осуществлять балансировку нагрузки. Кроме того, *Ingress* может использоваться для настройки SSL-шифрования и аутентификации клиентов. В целом, использование *Ingress* упрощает управление сетью и обеспечивает более гибкую и эффективную работу приложений в **Kubernetes**.
+The *Ingress* in **Kubernetes** is an object that allows you to manage incoming traffic to the cluster. *Ingress* serves as a controller that defines traffic routing rules between services in the cluster and the outside world. It allows developers and administrators to manage incoming traffic, configure routing and security, and perform load balancing. In addition, *Ingress* can be used to configure SSL encryption and client authentication. Overall, using *Ingress* simplifies network management and provides a more flexible and efficient application performance on **Kubernetes**.
 
-*ConfigMap* и *Secret* - это два механизма в Kubernetes для хранения конфигурационных данных и секретов, соответственно.
+*ConfigMap* and *Secret* are two mechanisms in Kubernetes for storing configuration data and secrets, respectively.
 
-*ConfigMap* используется для хранения конфигурационных данных, которые используются приложениями в контейнерах (обычно в виде переменных окружения). Например, это могут быть параметры, которые должны быть изменены при развертывании приложения, такие как адрес базы данных или порт веб-сервера. *ConfigMap* может быть применен к любому количеству контейнеров в поде.
+*ConfigMap* is used to store configuration data that is used by applications in containers (usually as environment variables). For example, these can be parameters that need to be changed when deploying an application, such as a database address or a web server port. *ConfigMap* can be applied to any number of containers in a pod.
 
-*Secret* используется для хранения конфиденциальной информации, такой как пароли, ключи и сертификаты. *Secret* может быть использован для любого количества контейнеров в поде. Важно отметить, что *Secret* хранится в зашифрованном виде в etcd кластера Kubernetes.
+*Secret* is used to store sensitive information such as passwords, keys and certificates. *Secret* can be used for any number of containers in the pod. It is important to note that *Secret* is stored encrypted in the etcd of the Kubernetes cluster.
 
-Использование *ConfigMap* и *Secret* позволяет снизить количество необходимых параметров в манифестах приложений и улучшить безопасность приложений, так как конфиденциальная информация не будет храниться в открытом виде. 
+Using *ConfigMap* and *Secret* reduces the number of required parameters in application manifests and improves application security, since confidential information will not be stored in clear form.
 
-## Интерфейс командной строки kubectl
+## The kubectl command line interface
 
-Kubectl - это клиент Kubernetes API, предоставляющий доступ к функциям окружения Kubernetes. Kubernetes API представляет из себя HTTP REST API сервер предоставляющий доступ ко всем функциям Kubernetes как к ендпоинтам для HTTP-запросов. 
+Kubectl is a Kubernetes API client, providing access to Kubernetes environment functions. The Kubernetes API is an HTTP REST API server providing access to all Kubernetes functions as endpoints for HTTP requests.
 
-### Основные команды kubectl
+### Basic kubectl commands
 
 * config
 
-Настройка и отображение конфигурации системы (kubeconfig)
+Configuring and displaying the system configuration (kubeconfig)
 
 `kubectl config view`
 
-* apply 
+* apply
 
-Управление ресурсами Kubernetes
+Managing Kubernetes resources
 
-`kubectl apply -f <относительный путь к манифесту>`
+`kubectl apply -f <relative path to the manifest>`
 
 `kubectl explain pods`
 
 * get
 
-Просмотри и поиск ресурсов системы
+Viewing and finding system resources
 
-`kubectl get <название ресурса> --<параметры поиска>`
+`kubectl get <resource name> --<search parameters>`
 
 * edit, scale, delete
 
-Редактирование конкретных ресурсов системы. Наиболее популярные команды при сопровождении системы Kubernetes
+Editing specific system resources. The most popular commands when maintaining a Kubernetes system are:
 
-`kubectl edit <название сервиса>`
+`kubectl edit <service name>`
 
-`kubectl scale --replicas=<количество сервисов> <название сервиса|путь к файлу манифеста>`
+`kubectl scale --replicas=<number of services> <service name|path to the manifest file>`
 
-`kubectl delete <название сервиса|путь к файлу манифеста>`
+`kubectl delete <service name|path to the manifest file>`
 
 * logs
 
-Важный инструмент при отладки системы в случае возникновения ошибок. Зачастую проблема заключается не только в некорректной настройки системы оркестрации, но и в самом программном продукте, запущенном в окружении.
+An important tool when debugging the system in case of errors. Often the problem lies not only in the incorrect configuration of the orchestration system, but also in the software product itself, running in the environment.
 
-Для отладки программного продукта можно использовать команду 
+To debug a software product, you can use the command
 
-`kubectl logs <название сервиса>`
+`kubectl logs <service name>`
 
-## Манифест
+## Manifest
 
-Манифест в Kubernetes - это файл, который описывает желаемое состояние объекта Kubernetes. Манифест может содержать множество параметров и конфигурационных параметров для объекта, например, деплоймента, сервиса, конфигурационной карты и т. д. 
+A Kubernetes manifest is a file that describes the desired state of a Kubernetes object. A manifest can contain many parameters and configuration settings for an object, such as a deployment, a service, a configuration map, etc.
 
-Общая структура манифеста в Kubernetes:
+The general structure of the manifest in Kubernetes:
 
 ```yml
-apiVersion: <API версия> # версия API Kubernetes, которую использует объект
-kind: <Тип объекта> # тип объекта (deployment, service, configmap и т.д.)
-metadata: # метаданные объекта, такие как название, метки и т.д.
-  name: <Название объекта>
+apiVersion: <API version> # version of the Kubernetes API that the object uses
+kind: <Object type> # object type (deployment, service, configmap и т.д.)
+metadata: # object's metadata, such as title, labels, etc.
+  name: <Object name>
   labels:
-    <Метки объекта>
-spec: # спецификация объекта, описывающая желаемое состояние
-  <Параметры объекта>
+    <Object labels>
+spec: # object specification describing the desired state
+  <Object parameters>
 ```
 
-Например, манифест для деплоймента может выглядеть следующим образом:
+For example, the manifest for a deployment might look like this:
 
 
 ```yml
@@ -146,6 +146,6 @@ spec:
         - containerPort: 8080
 ```
 
-В этом примере мы указываем желаемое количество реплик (3), определяем селектор для выбора подов (по метке "app: my-app") и описываем шаблон пода, который будет создан в случае необходимости. В шаблоне мы указываем название контейнера, используемый образ и порт, который будет открыт в контейнере.
+In this example, we specify the desired number of replicas (3), define a selector to select pods ( labeled "app: my-app") and describe the pod template that will be created if needed. In the template, we specify the name of the container, the image used and the port to be opened in the container.
 
-Часто применяется практика разделения манифестов на различные файлы, демонстрирующее поэтапное развертывание. Например, сначала можно создать конфиграционную карту, потом секреты, а потом сервисы и т. д. 
+The practice of splitting manifests into different files, showing a step-by-step deployment, is often used. For example, you might create a configure map first, then secrets, and then services, etc.
