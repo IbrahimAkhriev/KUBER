@@ -57,4 +57,4 @@ The result of the work must be a report with detailed descriptions of the implem
    - recreate
    - rolling
 
-💡 [Click here](https://forms.yandex.ru/cloud/6475c362e010db267d71e431/), **to share feedback on this project with us**. It's anonymous and will help the Pedago team make your learning better.
+💡 [Click here](https://forms.yandex.ru/cloud/6475c362e010db267d71e431/), **to share feedback on this project with us**. It's anonymous and will help the Product team make your learning better.
