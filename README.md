@@ -1,5 +1,7 @@
 # Basic Kubernetes
 
+💡 [Tap here](https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624) **to leave your feedback on the project**. It's anonymous and will help our team make your educational experience better. We recommend completing the survey immediately after the project.
+
 ## Contents
 
 1. [Chapter I](#chapter-i) 
@@ -56,5 +58,3 @@ The result of the work must be a report with detailed descriptions of the implem
 9) Update the application (by adding a new dependency to the pom file), and rebuild the application with the following deployment strategies (measure the application re-deployment time for each case and note the results in the report):
    - recreate
    - rolling
-
-💡 [Click here](https://forms.yandex.ru/cloud/6475c362e010db267d71e431/), **to share feedback on this project with us**. It's anonymous and will help the Product team make your learning better.
