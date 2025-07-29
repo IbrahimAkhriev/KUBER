@@ -1,6 +1,6 @@
 # Kubernetes
 
-**Kubernetes** is a powerful framework for orchestrating application containers developed by Google. Like docker swarm, it performs the basic functions of any orchestration tool: high availability, protection of internal traffic, encapsulation of a complex microservice application architecture into a single entity, and so on. But what is the main difference between **Kubernetes** and **Docker Swarm**? Besides higher complexity and more container control tools, the main feature of **Kubernetes** is the fact that it is a higher-level solution than **Docker Swarm** and is not tied directly to *Docker* technology. Yes, at the moment docker is the absolute leader in application containerization, but still it is not the only technology, and **Kubernetes** offers a unified approach regardless of the containerization tool.
+Kubernetes is a powerful framework for orchestrating application containers developed by Google. Like **Docker Swarm**, Kubernetes performs the basic functions of an orchestration tool, such as ensuring high availability, protecting internal traffic, and encapsulating a complex microservice application architecture into a single entity. But what is the main difference between Kubernetes and Docker Swarm? Besides being more complex and offering more control over containers, Kubernetes's main feature is that it is a higher-level solution than Docker Swarm and is not directly tied to Docker technology. **Docker** is currently the absolute leader in application containerization, but it is not the only technology. Kubernetes offers a unified approach regardless of the containerization tool.
 
 ## The architecture and principles of Kubernetes
 
@@ -8,109 +8,109 @@ Conceptually, a Kubernetes cluster is the following structure:
 
 <img src="misc/images/kubernetes.drawio.png"  width="600">
 
-The architecture of Kubernetes includes the following main components:
+The Kubernetes architecture includes the following main components:
 
-*Master node* is the main node that manages all the nodes in a Kubernetes cluster. It consists of several components:
+The **master node** is the main node that manages all the nodes in a Kubernetes cluster. It consists of several components:
 
-1. kube-apiserver: a component that provides an API for managing a Kubernetes cluster.
-2. etcd: a key-value store used to store Kubernetes cluster configuration data.
-3. kube-scheduler: a component responsible for scheduling work on nodes in a Kubernetes cluster.
-4. kube-controller-manager: is a component that manages the controllers that are responsible for performing operations such as scaling and fault recovery.
+1. The kube-apiserver — a component that provides an API for managing a Kubernetes cluster.
+2. etcd — a key-value store that stores Kubernetes cluster configuration data.
+3. kube-scheduler — a component responsible for scheduling work on nodes in a Kubernetes cluster.
+4. kube-controller-manager — a component that manages the controllers that are responsible for performing operations such as scaling and fault recovery.
 
-A *Node* or *Worker node* is the node on which application containers run. It consists of the following components:
+A **Node**, or **Worker node**, is the node on which application containers run. It consists of the following components:
 
-1. kubelet: a component that manages containers on the node and communicates with the kube-apiserver on the master node.
-2. kube-proxy: a component that is responsible for routing network requests to containers on the node.
+1. kubelet — a component that manages containers on the node and communicates with the kube-apiserver on the master node.
+2. kube-proxy — a component that is responsible for routing network requests to containers on the node.
 
-A *Pod* is the smallest unit in Kubernetes that contains one or more application containers. *Pod* is a minimal Kubernetes abstraction due to the fact that Kubernetes as a technology seeks to move away from being bound to a specific containerization tool, hence the need to create a new type of abstraction, which is an additional "container for container". Each *Pod* has its own IP address (determined dynamically when it runs) and shares the resources of the host it is running on. It is important to understand that when a *Pod* is restarted, its IP address changes because a new *Pod* is actually being started.
+A **Pod** is the smallest unit in Kubernetes and contains one or more application containers. A Pod is a minimal Kubernetes abstraction because Kubernetes seeks to move away from being bound to a specific containerization tool. This necessitates the creation of a new type of abstraction: an additional "container for containers." Each Pod has its own IP address, which is determined dynamically when it runs, and shares the resources of the host on which it runs. Note that when a Pod is restarted, its IP address changes because a new Pod is actually being started.
 
-But there are many other objects necessary to understand the Kubernetes architecture, most of which are listed below:
+However, there are many other objects necessary to understand the Kubernetes architecture. Most of these objects are listed below.
 
-The *Service* is a **Kubernetes** object that provides a persistent IP address and DNS name for accessing the application within the cluster. It can route requests to different *Pods* based on selectors. Moreover, when replicating *Pod*, the *service* object also acts as a balancer, distributing requests between replicas.
+A **Service** is a Kubernetes object that provides a persistent IP address and DNS name for accessing the application within the cluster. It can route requests to different Pods based on selectors. Additionally, when replicating a Pod, the service object acts as a balancer, distributing requests between replicas.
 
-The *Volume* is a **Kubernetes** object that is used to store data that containers in *Pod* need. Volume can be connected to an application container to provide access to data.
+A Kubernetes **Volume** is an object used to store data needed by containers in a Pod. A volume can be connected to an application container to provide access to data.
 
-The *Namespace* is a **Kubernetes** object used to group cluster resources and share access to those resources between users and teams.
+A **Namespace** is a Kubernetes object that groups cluster resources and shares access to those resources between users and teams.
 
-In **Kubernetes**, replication is a mechanism that allows you to create multiple copies of the same application and run them on multiple nodes. This ensures high availability of the application and also allows you to handle large workloads.
+In Kubernetes, **replication** is a mechanism that allows you to create multiple copies of the same application and run them on multiple nodes. This ensures the application's high availability and allows you to handle large workloads.
 
-Replication Controller manages the process of creating and scaling replicated pods in Kubernetes. When a replication controller is created, it creates the required number of pods specified in the controller specification. If any pod fails or is deleted, the controller automatically creates a new pod to replace the lost one.
+A **Replication Controller** manages the process of creating and scaling replicated Pods in Kubernetes. When a Replication Controller is created, it creates the specified number of Pods. If any Pod fails or is deleted, the controller automatically creates a new Pod to replace it.
 
-Replicated pods have a *label* that helps the replica controller manage them. Labels are also used so that services can determine which pods should receive traffic.
+Replicated Pods have a label that helps the Replication Controller manage them. Labels are also used to determine which Pods should receive traffic.
 
-Replica controllers can be used to scale applications horizontally, by increasing or decreasing the number of replicated pods. This allows you to respond quickly to changes in application load.
+You can use Replica Controllers to scale applications horizontally by increasing or decreasing the number of replicated Pods. This allows you to quickly respond to changes in application load.
 
-In **Kubernetes**, *Deployment* and *StatefulSet* are objects that control application runtime and scaling. Both objects are a declarative way of defining the desired state of an application and automatically managing its life cycle.
+In Kubernetes, **Deployment** and **StatefulSet** are objects that control application runtime and scaling. These objects provide a declarative way to define the desired state of an application and manage its lifecycle automatically.
 
-*Deployment* provides management of application deployment (installation) in **Kubernetes**. It describes how and when to create instances of the application as well as what updates to make when the configuration changes. *Deployment* automatically creates and manages multiple replicas of the application for fault tolerance and scalability.
+A **Deployment** provides management of application deployment (installation) in Kubernetes. It specifies how and when to create application instances, as well as which updates to apply when the configuration changes. Deployments automatically create and manage multiple replicas of the application for fault tolerance and scalability.
 
-*StatefulSet* provides control over the installation and scaling of applications that have state. This can be useful, for example, for databases that store data on hard disks and that cannot simply be copied and run on another cluster node. *StatefulSet* provides unique names for each application instance, stores their state, and provides unique host IDs for each instance.
+**StatefulSet** provides control over the installation and scaling of stateful applications. This can be useful for databases that store data on hard disks and cannot be easily copied and run on another cluster node, for example. StatefulSet provides unique names for each application instance, stores their state, and provides unique host IDs for each instance.
 
-In both cases, **Kubernetes** automatically manages the application life cycle, scaling, updating and rolling back changes. Developers can define the desired state of the application, and **Kubernetes** will ensure that it is achieved and maintained throughout the application life cycle.
+In both cases, Kubernetes automatically manages the application lifecycle, including scaling, updating, and rolling back changes. Developers can define the desired state of the application, and Kubernetes will ensure it is achieved and maintained throughout the application's life cycle.
 
-The *Ingress* in **Kubernetes** is an object that allows you to manage incoming traffic to the cluster. *Ingress* serves as a controller that defines traffic routing rules between services in the cluster and the outside world. It allows developers and administrators to manage incoming traffic, configure routing and security, and perform load balancing. In addition, *Ingress* can be used to configure SSL encryption and client authentication. Overall, using *Ingress* simplifies network management and provides a more flexible and efficient application performance on **Kubernetes**.
+In Kubernetes, the **Ingress** is an object that allows you to manage incoming traffic to the cluster. Ingress serves as a controller that defines traffic routing rules between services within the cluster and external services. It enables developers and administrators to manage incoming traffic, configure routing and security, and perform load balancing. Additionally, Ingress can be used to configure SSL encryption and client authentication. Overall, using Ingress simplifies network management and improves application performance on Kubernetes.
 
-*ConfigMap* and *Secret* are two mechanisms in Kubernetes for storing configuration data and secrets, respectively.
+**ConfigMap** and **Secret** are two Kubernetes mechanisms for storing configuration data and secrets, respectively.
 
-*ConfigMap* is used to store configuration data that is used by applications in containers (usually as environment variables). For example, these can be parameters that need to be changed when deploying an application, such as a database address or a web server port. *ConfigMap* can be applied to any number of containers in a pod.
+A **ConfigMap** stores configuration data used by applications in containers, usually as environment variables. These can be parameters that need to be changed when deploying an application, such as a database address or web server port. A ConfigMap can be applied to any number of containers in a Pod.
 
-*Secret* is used to store sensitive information such as passwords, keys and certificates. *Secret* can be used for any number of containers in the pod. It is important to note that *Secret* is stored encrypted in the etcd of the Kubernetes cluster.
+A **Secret** is used to store sensitive information, such as passwords, keys, and certificates. Secrets can be used for any number of containers in a Pod. It is important to note that Secrets are stored encrypted in the etcd of the Kubernetes cluster.
 
-Using *ConfigMap* and *Secret* reduces the number of required parameters in application manifests and improves application security, since confidential information will not be stored in clear form.
+Using ConfigMap and Secret reduces the number of parameters required in application manifests and improves application security since confidential information is not stored in clear form.
 
 ## The kubectl command line interface
 
-Kubectl is a Kubernetes API client, providing access to Kubernetes environment functions. The Kubernetes API is an HTTP REST API server providing access to all Kubernetes functions as endpoints for HTTP requests.
+**Kubectl** is a Kubernetes API client that provides access to functions in the Kubernetes environment. The Kubernetes API is an HTTP REST API server that provides access to all Kubernetes functions as endpoints for HTTP requests.
 
 ### Basic kubectl commands
 
-* config
+* **config**
 
-Configuring and displaying the system configuration (kubeconfig)
+Configuring and displaying the system configuration (kubeconfig):
 
-`kubectl config view`
+  `kubectl config view`.
 
-* apply
+* **apply**
 
-Managing Kubernetes resources
+Managing Kubernetes resources:
 
-`kubectl apply -f <relative path to the manifest>`
+  `kubectl apply -f <relative path to the manifest>`;
 
-`kubectl explain pods`
+  `kubectl explain pods`.
 
-* get
+* **get**
 
-Viewing and finding system resources
+Viewing and finding system resources:
 
-`kubectl get <resource name> --<search parameters>`
+  `kubectl get <resource name> --<search parameters>`.
 
-* edit, scale, delete
+* **edit, scale, delete**
 
 Editing specific system resources. The most popular commands when maintaining a Kubernetes system are:
 
-`kubectl edit <service name>`
+  `kubectl edit <service name>`;
 
-`kubectl scale --replicas=<number of services> <service name|path to the manifest file>`
+  `kubectl scale --replicas=<number of services> <service name|path to the manifest file>`;
 
-`kubectl delete <service name|path to the manifest file>`
+  `kubectl delete <service name|path to the manifest file>`.
 
-* logs
+* **logs**
 
-An important tool when debugging the system in case of errors. Often the problem lies not only in the incorrect configuration of the orchestration system, but also in the software product itself, running in the environment.
+This is an important tool for debugging the system in case of errors. Often, the problem lies not only in the incorrect configuration of the orchestration system but also in the software product running in the environment.
 
-To debug a software product, you can use the command
+To debug a software product, use the command:
 
-`kubectl logs <service name>`
+  `kubectl logs <service name>`.
 
 ## Manifest
 
-A Kubernetes manifest is a file that describes the desired state of a Kubernetes object. A manifest can contain many parameters and configuration settings for an object, such as a deployment, a service, a configuration map, etc.
+A Kubernetes **manifest** is a file that describes the desired state of a Kubernetes object. A manifest can contain parameters and configuration settings for objects such as deployments, services, and configuration maps.
 
-The general structure of the manifest in Kubernetes:
+The general structure of a Kubernetes manifest is as follows:
 
 ```yml
 apiVersion: <API version> # version of the Kubernetes API that the object uses
-kind: <Object type> # object type (deployment, service, configmap и т.д.)
+kind: <Object type> # object type (deployment, service, configmap, etc.)
 metadata: # object's metadata, such as title, labels, etc.
   name: <Object name>
   labels:
@@ -146,6 +146,6 @@ spec:
         - containerPort: 8080
 ```
 
-In this example, we specify the desired number of replicas (3), define a selector to select pods ( labeled "app: my-app") and describe the pod template that will be created if needed. In the template, we specify the name of the container, the image used and the port to be opened in the container.
+In this example, we specify the desired number of replicas (3), define a selector to identify Pods labeled `app: my-app`, and describe the Pod template to be created, if necessary. The template specifies the name of the container, the image used, and the port to be opened in the container.
 
-The practice of splitting manifests into different files, showing a step-by-step deployment, is often used. For example, you might create a configure map first, then secrets, and then services, etc.
+Splitting manifests into different files to show a step-by-step deployment is a common practice. For instance, you might first create a configuration map, then secrets, then services, and so on.

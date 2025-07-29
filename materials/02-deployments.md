@@ -1,15 +1,15 @@
 # Deployment strategies
 
-Kubernetes provides several deployment strategies that determine how an application is updated in a Kubernetes cluster.
+Kubernetes offers a variety of deployment strategies that dictate how applications are updated within a Kubernetes cluster.
 
-1. Recreate is the simplest strategy. When you update an application, all current pods are deleted first, and then new pods are created with the new version of the application. This strategy can lead to some temporary downtime of the application, when all current pods are deleted and no new pods are created yet.
+1. **Recreate** is the simplest strategy. When updating an application, this strategy deletes all current Pods first and then creates new Pods with the updated application version. This strategy can lead to temporary application downtime when all current Pods are deleted and no new Pods have been created yet.
 
-2. Rolling Update is the most popular strategy. When an application is updated, new pods gradually run and replace the old ones. The number of pods of the old and new version of the application may vary until all pods have been replaced by the new version.
+2. The **Rolling Update** strategy is the most popular. When an application is updated, new Pods gradually replace the old ones. The number of Pods of the old and new versions of the application may vary until all Pods have been replaced by the new version.
 
-3. Blue/Green Deployment - this strategy creates two separate groups of pods, called Blue and Green. Initially, traffic is directed to the Blue group, and a new version of the application is deployed in the Green group. When the Green group is fully ready, traffic is switched to it. If a failure occurs during the switch, you can quickly return to the previous version of the application.
+3. **Blue/Green Deployment**: this strategy involves creating two groups of pods, called Blue and Green. Initially, traffic is directed to the Blue group while a new version of the application is deployed to the Green group. Once the Green group is ready, traffic switches to it. If a failure occurs during the switch, it is possible to quickly return to the previous version of the application.
 
-4. Canary Deployment - with this strategy, the new version of the application is deployed only to a small group of users to test its functionality and performance. If all works well, the new version is gradually deployed to all users.
+4. **Canary Deployment**: with this strategy, the new version of the application is deployed only to a small group of users to test its functionality and performance. If all goes well, the new version is gradually deployed to all users.
 
-5. A/B Testing - with this strategy, different versions of the application are deployed to different groups of users to test which version works better. Typically used to test new features or changes to the user interface.
+5. **A/B testing**: with this strategy, different versions of the application are deployed to different groups of users to determine which version works better. This strategy is typically used to test new features or changes to the user interface.
 
-Typically, Kubernetes manifests for each deployment strategy look different, but in general, they all have a similar structure and describe the resources required to run and update the application.
+Kubernetes manifests for each deployment strategy usually look different, but they generally have a similar structure and describe the resources needed to run and update the application.
