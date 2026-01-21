@@ -1,0 +1,38 @@
+apiVersion: v1
+data:
+  GATEWAY_SERVICE_HOST: gateway-service
+  GATEWAY_SERVICE_PORT: "8087"
+
+  SESSION_SERVICE_HOST: session-service
+  SESSION_SERVICE_PORT: "8081"
+
+  HOTEL_SERVICE_HOST: hotel-service
+  HOTEL_SERVICE_PORT: "8082"
+
+  BOOKING_SERVICE_HOST: booking-service
+  BOOKING_SERVICE_PORT: "8083"
+
+  PAYMENT_SERVICE_HOST: payment-service
+  PAYMENT_SERVICE_PORT: "8084"
+
+  LOYALTY_SERVICE_HOST: loyalty-service
+  LOYALTY_SERVICE_PORT: "8085"
+
+  REPORT_SERVICE_HOST: report-service
+  REPORT_SERVICE_PORT: "8086"
+
+  POSTGRES_HOST: postgres
+  POSTGRES_PORT: "5432"
+  POSTGRES_DB: app
+
+  RABBIT_MQ_HOST: rabbitmq
+  RABBIT_MQ_PORT: "5672"
+  RABBIT_MQ_EXCHANGE: "exchange"
+  RABBIT_MQ_QUEUE_NAME: "queue"
+kind: ConfigMap
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"v1","data":{"BOOKING_SERVICE_HOST":"booking-service","BOOKING_SERVICE_PORT":"8080","GATEWAY_SERVICE_HOST":"gateway-service","HOTEL_SERVICE_HOST":"hotel-service","HOTEL_SERVICE_PORT":"8080","LOYALTY_SERVICE_HOST":"loyalty-service","LOYALTY_SERVICE_PORT":"8080","PAYMENT_SERVICE_HOST":"payment-service","PAYMENT_SERVICE_PORT":"8080","POSTGRES_DB":"app","POSTGRES_HOST":"postgres","POSTGRES_PORT":"5432","RABBITMQ_HOST":"rabbitmq","REPORT_SERVICE_HOST":"report-service","REPORT_SERVICE_PORT":"8080","SESSION_SERVICE_HOST":"session-service","SESSION_SERVICE_PORT":"8080"},"kind":"ConfigMap","metadata":{"annotations":{},"creationTimestamp":"2026-01-20T10:36:57Z","name":"app-config","namespace":"devops10","resourceVersion":"8197","uid":"1da94daf-9e1b-4d3e-b1b3-85379eb73380"}}
+  name: app-config
+  namespace: devops10
